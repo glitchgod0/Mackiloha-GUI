@@ -31,7 +31,8 @@
 *.out
 *.app
 
-
+src/Mackiloha-GUI
+src/buildnrun.sh
 src/arkhelper
 src/dtab
 src/superfreq

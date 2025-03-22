@@ -9,6 +9,8 @@ Very basic ImGUI app for working with Mackiloha. Currently Linux only at the mom
 * Console output window
 
 # Issues
+No file dialog.
+buggy.
 App freezes when running a tool.
 Code looks messy.
 
