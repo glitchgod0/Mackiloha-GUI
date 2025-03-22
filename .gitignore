@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+
+src/arkhelper
+src/dtab
+src/superfreq
+src/p9songtool
