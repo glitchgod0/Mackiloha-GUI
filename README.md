@@ -1,5 +1,7 @@
 # MackilohaGUI
 Very basic ImGUI app for working with Mackiloha. Currently Linux only at the moment, I want more platform support but I don't have the hardware and abilty.
+Place arkhelper, dtab and other mackiloha execs beside compiled mackiloha-gui
+
 
  # Goals
 * Arkhelper - 2/3 functions done

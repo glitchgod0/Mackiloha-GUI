@@ -51,11 +51,20 @@ static void HelpMarker(const char* desc)
 
 void RunArkhelper(const char* selectedTool, const std::vector<std::string>& args)
 {
+    printf("[DEBUG] Selected tool: %s\n", selectedTool);
+
+    for (const auto& arg : args) {
+        std::cout << "[DEBUG] Arg: " << arg << std::endl;
+    }
+
+    //auto obuf = check_output({"./arkhelper", selectedTool});
+
     std::vector<std::string> fullArgs = {"./arkhelper", selectedTool};
     fullArgs.insert(fullArgs.end(), args.begin(), args.end());
     auto obuf = check_output(fullArgs);
 
 }
+
 
 // Main code
 int main(int, char**)
@@ -174,7 +183,7 @@ int main(int, char**)
         {
             static int counter = 0;
 
-            ImGui::Begin("Mackiloha ImGui");
+            ImGui::Begin("Mackiloha ImGui");      
             ImGui::SetWindowSize(ImVec2(800, 400));
             ImGui::GetStyle().FrameRounding = 2.0f;
             ImGui::GetStyle().FrameBorderSize = 1.0f;
