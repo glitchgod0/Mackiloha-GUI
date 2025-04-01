@@ -86,23 +86,19 @@ def Dir2ArkCallback():
     sp.run([arkhelper, "dir2ark", Dir2Ark_InFolder, Dir2Ark_OutFolder] + OptionalArgs)   
 
 def PatchcreatorCallback():
-    print(f"[DEBUG] Dir2Ark_InFolder: {Dir2Ark_InFolder}")
-    print(f"[DEBUG] Dir2Ark_OutFolder: {Dir2Ark_OutFolder}")
-    print(f"[DEBUG] Dir2Ark_Name: {Dir2Ark_Name}")
-    print(f"[DEBUG] Dir2Ark_Version: {Dir2Ark_Version}")
-    print(f"[DEBUG] Dir2Ark_Encrypt: {Dir2Ark_Encrypt}")
+    print(f"[DEBUG] Patchcreator_ArkFiles_Path: {Patchcreator_ArkFiles_Path}")
+    print(f"[DEBUG] Patchcreator_outputPath: {Patchcreator_outputPath}")
+    print(f"[DEBUG] Patchcreator_arkpath: {Patchcreator_arkpath}")
+    print(f"[DEBUG] Patchcreator_exepath: {Patchcreator_exepath}")
 
     OptionalArgs = []
+:
+        OptionalArgs.append(f"-a {Patchcreator_ArkFiles_Path}")
 
+    if Patchcreator_outputPath != "":
+        OptionalArgs.append(f"-o {Patchcreator_outputPath}")
 
-    if Dir2Ark_Name != "":
-        OptionalArgs.append(f"-n {Dir2Ark_Name}")
-    if Dir2Ark_Version != "":
-        OptionalArgs.append(f"-v {Dir2Ark_Version}")
-    if Dir2Ark_Encrypt == True:
-        OptionalArgs.append("-e")
-
-    sp.run([arkhelper, "patchcreator", Dir2Ark_InFolder, Dir2Ark_OutFolder] + OptionalArgs)    
+        sp.run([arkhelper, "patchcreator", Patchcreator_arkpath, arkhelper] + OptionalArgs)    
 
 
 
@@ -157,10 +153,10 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=400):
                     dpg.add_button(label="Run Arkhelper", callback=Dir2ArkCallback)                 
 
                 with dpg.tab(label="Patchcreator"):
-                    dpg.add_text("Options for Patchcreator:")
-                    dpg.add_input_text(label="Base Arks", default_value="main", callback=UpdateVarCallback, user_data="Patchcreator_ArkFiles_Path")
-                    dpg.add_input_text(label="Path to Ark", default_value="main", callback=UpdateVarCallback, user_data="Patchcreator_arkpath")
-                    dpg.add_input_text(label="Output", default_value="main", callback=UpdateVarCallback, user_data="Patchcreator_outputPath")
+                    dpg.add_text("Options for Patchcreator (Only recommended for advanced users):")
+                    dpg.add_input_text(label="Path to the base HDR", callback=UpdateVarCallback, user_data="Patchcreator_arkpath")
+                    dpg.add_input_text(label="Base Base Arks", callback=UpdateVarCallback, user_data="Patchcreator_ArkFiles_Path")
+                    dpg.add_input_text(label="Output", callback=UpdateVarCallback, user_data="Patchcreator_outputPath")
                     dpg.add_button(label="Run Arkhelper", callback=PatchcreatorCallback)   
 
 
