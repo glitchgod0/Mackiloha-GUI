@@ -43,6 +43,13 @@ Milo2Dir_Preset = "gh2_x360"
 Milo2Dir_Milo = ""
 Milo2Dir_Dir = ""
 
+Tex2Png_UseVersion = False
+Tex2Png_Version = ""
+Tex2Png_Endian = False
+Tex2Png_Preset = "gh2_x360"
+Tex2Png_Milo = ""
+Tex2Png_Dir = ""
+
 
 #####################
 # Specify tool folder
@@ -194,6 +201,34 @@ def Milo2DirCallback(): # launches arkhelper with milo2dir + specified args
     proc = sp.run([superfreq, "milo2dir", Milo2Dir_Milo, Milo2Dir_Dir] + OptionalArgs, capture_output=True, text=True)
     PrintfToConsole(str(proc.stdout))
 
+def Tex2PngCallback(): # launches arkhelper with tex2png + specified args
+    if DebugMode == True:
+        print(f"[DEBUG] Tex2Png_Convert: {Tex2Png_Convert}")
+        print(f"[DEBUG] Tex2Png_Version: {Tex2Png_Version}")
+        print(f"[DEBUG] Tex2Png_Endian: {Tex2Png_Endian}")
+        print(f"[DEBUG] Tex2Png_Preset: {Tex2Png_Preset}")
+        print(f"[DEBUG] Tex2Png_Milo: {Tex2Png_Milo}")
+        print(f"[DEBUG] Tex2Png_Dir: {Tex2Png_Dir}")
+        print(f"[DEBUG] Tex2Png_UseVersion: {Tex2Png_UseVersion}")
+
+    OptionalArgs = []
+
+    if Dir2Milo_Endian == True:
+        OptionalArgs.append("-b")
+
+    if not Tex2Png_Preset == "None":
+        OptionalArgs.append("-r")
+        OptionalArgs.append(Tex2Png_Preset)
+    
+    if Tex2Png_UseVersion == True and Tex2Png_Preset == "None":
+        OptionalArgs.append("-m")
+        OptionalArgs.append(Tex2Png_Version)        
+
+    print(OptionalArgs)
+
+    proc = sp.run([superfreq, "tex2png", Tex2Png_Milo, Tex2Png_Dir] + OptionalArgs, capture_output=True, text=True)
+    PrintfToConsole(str(proc.stdout))
+
 ####################
 # System Window Init
 ####################
@@ -315,6 +350,28 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
                     dpg.add_checkbox(label="Convert Textures?", callback=UpdateVarCallback, user_data="Milo2Dir_Convert")
                     #dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Milo2Dir_Endian")
                     dpg.add_button(label="Run Superfreq", callback=Milo2DirCallback)
+
+                with dpg.tab(label="Tex2Png"):
+                    dpg.add_text("Options for Tex2Png:")   
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_input_text(label="Input File", hint="Enter Input Milo Here (*)", callback=UpdateVarCallback, user_data="Tex2Png_Milo")
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_input_text(label="Folder Path", hint="Enter Folder Path Here (*)", callback=UpdateVarCallback, user_data="Tex2Png_Dir")
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_combo(("gh1", "gh2", "gh80s", "gh2_x360"), default_value="gh2_x360",label="Preset", callback=UpdateVarCallback, user_data="Tex2Png_Preset")
+
+                    #with dpg.group(horizontal=True): 
+                    #   dpg.add_checkbox(callback=UpdateVarCallback, user_data="Tex2Png_UseVersion")
+                    #    dpg.add_input_int(label="Milo Version", default_value=24, callback=UpdateVarCallback, user_data="Dir2Milo_Version")
+
+                    #dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Tex2Png_Endian")
+                    dpg.add_button(label="Run Superfreq", callback=Tex2PngCallback)
 
             
 
