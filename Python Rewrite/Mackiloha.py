@@ -92,8 +92,8 @@ def PatchcreatorCallback():
     print(f"[DEBUG] Patchcreator_exepath: {Patchcreator_exepath}")
 
     OptionalArgs = []
-:
-        OptionalArgs.append(f"-a {Patchcreator_ArkFiles_Path}")
+
+    OptionalArgs.append(f"-a {Patchcreator_ArkFiles_Path}")
 
     if Patchcreator_outputPath != "":
         OptionalArgs.append(f"-o {Patchcreator_outputPath}")
@@ -103,7 +103,7 @@ def PatchcreatorCallback():
 
 
 dpg.create_context()
-dpg.create_viewport(title='Mackiloha-GUI - Python Rewrite', width=1280, height=720)
+dpg.create_viewport(title='Mackiloha-GUI - v1.0p', width=1280, height=720)
 
 
 with dpg.window(label="Mackiloha-GUI", width=800, height=400):
@@ -165,6 +165,8 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=400):
 
         with dpg.tab(label="Superfreq"):
             dpg.add_text("This is the broccoli tab!")
+
+            
 
 
 
