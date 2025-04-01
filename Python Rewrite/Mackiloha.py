@@ -4,6 +4,7 @@ import subprocess as sp
 import sys
 
 DebugMode = False
+Version = "v1.1p"
 
 # Check if debug mode is enabled
 if len(sys.argv) > 1:
@@ -78,6 +79,17 @@ def _help(message): # Taken from the DearPyGui demo script, handles help text.
     t = dpg.add_text("(?)", color=[0, 255, 0])
     with dpg.tooltip(t):
         dpg.add_text(message)
+
+def add_and_load_image(image_path, parent=None): # Adds and loads an image
+    width, height, channels, data = dpg.load_image(image_path)
+
+    with dpg.texture_registry() as reg_id:
+        texture_id = dpg.add_static_texture(width, height, data, parent=reg_id)
+
+    if parent is None:
+        return dpg.add_image(texture_id)
+    else:
+        return dpg.add_image(texture_id, parent=parent)
 
 def PrintfToConsole(fmt, *args): # Use like a printf, output goes to the Output Window
     formatted_text = fmt if not args else fmt + " " + " ".join(map(str, args)) # ngl chatgpt did this line idk man
@@ -233,7 +245,7 @@ def Tex2PngCallback(): # launches arkhelper with tex2png + specified args
 # System Window Init
 ####################
 dpg.create_context()
-dpg.create_viewport(title='Mackiloha-GUI - v1.0p', width=800, height=720)
+dpg.create_viewport(title=f'Mackiloha-GUI - {Version}', width=800, height=720)
 
 
 #####################################################
@@ -374,8 +386,10 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
                     #dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Tex2Png_Endian")
                     dpg.add_button(label="Run Superfreq", callback=Tex2PngCallback)
 
-        with dpg.tab(label="Credits"):
-            dpg.add_text("Mackiloha-GUI")
+        with dpg.tab(label="Info"):
+            dpg.add_text("Mackiloha-GUI - Python Rewrite")
+            dpg.add_text("ImGui interface for Mackiloha")
+            dpg.add_text(f"Version: {Version}")
                 
 
             
