@@ -51,6 +51,13 @@ Tex2Png_Preset = "gh2_x360"
 Tex2Png_Milo = ""
 Tex2Png_Dir = ""
 
+Png2Tex_UseVersion = False
+Png2Tex_Version = ""
+Png2Tex_Endian = False
+Png2Tex_Preset = "gh2_x360"
+Png2Tex_Milo = ""
+Png2Tex_Dir = ""
+
 
 #####################
 # Specify tool folder
@@ -167,7 +174,7 @@ def PatchcreatorCallback(): # launches arkhelper with Patchcreator + specified a
     proc = sp.run([arkhelper, "patchcreator", Patchcreator_arkpath, arkhelper] + OptionalArgs, capture_output=True, text=True)
     PrintfToConsole(str(proc.stdout))    
 
-def Dir2MiloCallback(): # launches arkhelper with dir2milo + specified args
+def Dir2MiloCallback(): # launches superfreq with dir2milo + specified args
     if DebugMode == True:
         print(f"[DEBUG] Dir2Milo_Preset: {Dir2Milo_Preset}")
         print(f"[DEBUG] Dir2Milo_Dir: {Dir2Milo_Dir}")
@@ -182,7 +189,7 @@ def Dir2MiloCallback(): # launches arkhelper with dir2milo + specified args
     proc = sp.run([superfreq, "dir2milo", Dir2Milo_Dir, Dir2Milo_Milo, "-r", Dir2Milo_Preset] + OptionalArgs, capture_output=True, text=True)
     PrintfToConsole(str(proc.stdout))
 
-def Milo2DirCallback(): # launches arkhelper with milo2dir + specified args
+def Milo2DirCallback(): # launches superfreq with milo2dir + specified args
     if DebugMode == True:
         print(f"[DEBUG] Milo2Dir_Convert: {Milo2Dir_Convert}")
         print(f"[DEBUG] Milo2Dir_Version: {Milo2Dir_Version}")
@@ -213,9 +220,8 @@ def Milo2DirCallback(): # launches arkhelper with milo2dir + specified args
     proc = sp.run([superfreq, "milo2dir", Milo2Dir_Milo, Milo2Dir_Dir] + OptionalArgs, capture_output=True, text=True)
     PrintfToConsole(str(proc.stdout))
 
-def Tex2PngCallback(): # launches arkhelper with tex2png + specified args
+def Tex2PngCallback(): # launches superfreq with tex2png + specified args
     if DebugMode == True:
-        print(f"[DEBUG] Tex2Png_Convert: {Tex2Png_Convert}")
         print(f"[DEBUG] Tex2Png_Version: {Tex2Png_Version}")
         print(f"[DEBUG] Tex2Png_Endian: {Tex2Png_Endian}")
         print(f"[DEBUG] Tex2Png_Preset: {Tex2Png_Preset}")
@@ -241,6 +247,33 @@ def Tex2PngCallback(): # launches arkhelper with tex2png + specified args
     proc = sp.run([superfreq, "tex2png", Tex2Png_Milo, Tex2Png_Dir] + OptionalArgs, capture_output=True, text=True)
     PrintfToConsole(str(proc.stdout))
 
+def Png2TexCallback(): # launches superfreq with Png2Tex + specified args
+    if DebugMode == True:
+        print(f"[DEBUG] Png2Tex_Version: {Png2Tex_Version}")
+        print(f"[DEBUG] Png2Tex_Endian: {Png2Tex_Endian}")
+        print(f"[DEBUG] Png2Tex_Preset: {Png2Tex_Preset}")
+        print(f"[DEBUG] Png2Tex_Milo: {Png2Tex_Milo}")
+        print(f"[DEBUG] Png2Tex_Dir: {Png2Tex_Dir}")
+        print(f"[DEBUG] Png2Tex_UseVersion: {Png2Tex_UseVersion}")
+
+    OptionalArgs = []
+
+    if Dir2Milo_Endian == True:
+        OptionalArgs.append("-b")
+
+    if not Png2Tex_Preset == "None":
+        OptionalArgs.append("-r")
+        OptionalArgs.append(Png2Tex_Preset)
+    
+    if Png2Tex_UseVersion == True and Png2Tex_Preset == "None":
+        OptionalArgs.append("-m")
+        OptionalArgs.append(Png2Tex_Version)        
+
+    print(OptionalArgs)
+
+    proc = sp.run([superfreq, "Png2Tex", Png2Tex_Milo, Png2Tex_Dir] + OptionalArgs, capture_output=True, text=True)
+    PrintfToConsole(str(proc.stdout))
+
 ####################
 # System Window Init
 ####################
@@ -264,7 +297,6 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
     if DebugMode == True:
         with dpg.collapsing_header(label="--DEBUG--"):
             dpg.add_button(label="Open Demo Window", callback=DemoWindowCallback)
-            dpg.add_button(label="Run Superfreq", callback=Tex2PngCallback)
 
     # this bit is a bit messy, tabs within tabs is ass.
     with dpg.tab_bar(): # Main tab bar, this specifies the tool to use, arkhelper, superfreq, etc
@@ -274,6 +306,7 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
             with dpg.tab_bar(): # Sub tab bar #1, this specifies the main argument, ark2dir, dir2ark, etc.
                             
                 with dpg.tab(label="Ark2Dir"):
+                    dpg.add_text("Extracts Harmonix Archive files (.ark/.hdr).")    
                     dpg.add_text("Options for Ark2Dir:")    
 
                     with dpg.group(horizontal=True):
@@ -289,6 +322,7 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
                     dpg.add_button(label="Run Arkhelper", callback=Ark2DirCallback)
 
                 with dpg.tab(label="Dir2Ark"):
+                    dpg.add_text("Creates Harmonix Archive files (.ark/.hdr) from a specified folder.")
                     dpg.add_text("Options for Dir2Ark:")
 
                     with dpg.group(horizontal=True):
@@ -308,7 +342,8 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
                     dpg.add_button(label="Run Arkhelper", callback=Dir2ArkCallback)                 
 
                 with dpg.tab(label="Patchcreator"):
-                    dpg.add_text("Options for Patchcreator (Only recommended for advanced users):")
+                    dpg.add_text("Creates .ark/.hdr files with only updated files for games without patch ark support.")
+                    dpg.add_text("Options for Patchcreator:")
                     dpg.add_input_text(label="Path to the base HDR (*)", callback=UpdateVarCallback, user_data="Patchcreator_arkpath")
                     dpg.add_input_text(label="Base Base Arks (*)", callback=UpdateVarCallback, user_data="Patchcreator_ArkFiles_Path")
                     dpg.add_input_text(label="Output (*)", callback=UpdateVarCallback, user_data="Patchcreator_outputPath")
@@ -319,6 +354,7 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
             with dpg.tab_bar():
 
                 with dpg.tab(label="Dir2Milo"):
+                    dpg.add_text("Creates a .milo scene file from a specified folder.")
                     dpg.add_text("Options for Dir2Milo:")   
 
                     with dpg.group(horizontal=True):
@@ -342,6 +378,7 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
                     dpg.add_button(label="Run Superfreq", callback=Dir2MiloCallback)
 
                 with dpg.tab(label="Milo2Dir"):
+                    dpg.add_text("Extracts a .Milo scene file to a specified folder")
                     dpg.add_text("Options for Milo2Dir:")   
 
                     with dpg.group(horizontal=True):
@@ -365,15 +402,16 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
                     dpg.add_button(label="Run Superfreq", callback=Milo2DirCallback)
 
                 with dpg.tab(label="Tex2Png"):
+                    dpg.add_text("Converts a Milo texture to .png")
                     dpg.add_text("Options for Tex2Png:")   
 
                     with dpg.group(horizontal=True):
                         #dpg.add_button(label="Open") # Eventually make a file dialog here.
-                        dpg.add_input_text(label="Input File", hint="Enter Input Milo Here (*)", callback=UpdateVarCallback, user_data="Tex2Png_Milo")
+                        dpg.add_input_text(label="Input Texture", hint="Enter Input Tex Here (*)", callback=UpdateVarCallback, user_data="Tex2Png_Milo")
 
                     with dpg.group(horizontal=True):
                         #dpg.add_button(label="Open") # Eventually make a file dialog here.
-                        dpg.add_input_text(label="Folder Path", hint="Enter Folder Path Here (*)", callback=UpdateVarCallback, user_data="Tex2Png_Dir")
+                        dpg.add_input_text(label="Output .png", hint="Enter Output .png Here (*)", callback=UpdateVarCallback, user_data="Tex2Png_Dir")
 
                     with dpg.group(horizontal=True):
                         #dpg.add_button(label="Open") # Eventually make a file dialog here.
@@ -385,6 +423,29 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
 
                     #dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Tex2Png_Endian")
                     dpg.add_button(label="Run Superfreq", callback=Tex2PngCallback)
+
+                with dpg.tab(label="Png2Tex"):
+                    dpg.add_text("Converts a .png to a Milo texture")
+                    dpg.add_text("Options for Png2Tex:")   
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_input_text(label="Input .png", hint="Enter Input .png Here (*)", callback=UpdateVarCallback, user_data="Png2Tex_Milo")
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_input_text(label="Output Texture", hint="Enter Output Tex Here (*)", callback=UpdateVarCallback, user_data="Png2Tex_Dir")
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_combo(("gh1", "gh2", "gh80s", "gh2_x360"), default_value="gh2_x360",label="Preset", callback=UpdateVarCallback, user_data="Png2Tex_Preset")
+
+                    #with dpg.group(horizontal=True): 
+                    #   dpg.add_checkbox(callback=UpdateVarCallback, user_data="Png2Tex_UseVersion")
+                    #    dpg.add_input_int(label="Milo Version", default_value=24, callback=UpdateVarCallback, user_data="Dir2Milo_Version")
+
+                    #dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Png2Tex_Endian")
+                    dpg.add_button(label="Run Superfreq", callback=Png2TexCallback)
 
         with dpg.tab(label="Info"):
             dpg.add_text("Mackiloha-GUI - Python Rewrite")
