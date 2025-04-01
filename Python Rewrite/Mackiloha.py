@@ -92,13 +92,12 @@ def PatchcreatorCallback():
     print(f"[DEBUG] Patchcreator_exepath: {Patchcreator_exepath}")
 
     OptionalArgs = []
-
     OptionalArgs.append(f"-a {Patchcreator_ArkFiles_Path}")
 
     if Patchcreator_outputPath != "":
         OptionalArgs.append(f"-o {Patchcreator_outputPath}")
 
-        sp.run([arkhelper, "patchcreator", Patchcreator_arkpath, arkhelper] + OptionalArgs)    
+    sp.run([arkhelper, "patchcreator", Patchcreator_arkpath, arkhelper] + OptionalArgs)    
 
 
 
