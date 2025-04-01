@@ -1,5 +1,5 @@
 # MackilohaGUI
-Very basic ImGUI app for working with Mackiloha.
+Very basic ImGUI app for working with Mackiloha and maybe other things in the future.
 
 
  # Goals
@@ -7,7 +7,7 @@ Very basic ImGUI app for working with Mackiloha.
 * Superfreq - TODO
 * P9SongTool - TODO
 * Grim support - eventually but not primary focus.
-* Console output window
+* Console output window - Done!
 
 # Issues
 No file dialog. yet

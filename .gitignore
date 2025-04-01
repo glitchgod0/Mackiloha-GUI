@@ -39,7 +39,19 @@ C++Ver/src/dtab
 C++Ver/src/superfreq
 C++Ver/src/p9songtool
 
-Python Rewrite/arkhelper
-Python Rewrite/dtab
-Python Rewrite/superfreq
-Python Rewrite/p9songtool
+
+Python Rewrite/Apps/Linux/arkhelper
+Python Rewrite/Apps/Mac/arkhelper
+Python Rewrite/Apps/Windows/arkhelper.exe
+
+Python Rewrite/Apps/Linux/dtab
+Python Rewrite/Apps/Mac/dtab
+Python Rewrite/Apps/Windows/dtab
+
+Python Rewrite/Apps/Linux/superfreq
+Python Rewrite/Apps/Mac/superfreq
+Python Rewrite/Apps/Windows/superfreq
+
+Python Rewrite/Apps/Linux/p9songtool
+Python Rewrite/Apps/Mac/p9songtool
+Python Rewrite/Apps/Windows/p9songtool
