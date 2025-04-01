@@ -5,7 +5,7 @@ Very basic ImGUI app for working with Mackiloha and maybe other things in the fu
 Put the Mackiloha apps + dtab in the Apps/Platform folder
 
  # Goals
-* Arkhelper - 3/3 functions done
+* Arkhelper - Done!
 * Superfreq - TODO
 * P9SongTool - TODO
 * Grim support - eventually but not primary focus.

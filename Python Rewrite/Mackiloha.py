@@ -14,14 +14,14 @@ if len(sys.argv) > 1:
 #############################################
 Ark2Dir_InFile = ""
 Ark2Dir_OutFolder = ""
-Ark2Dir_DTA = ""
-Ark2Dir_Inflate = ""
+Ark2Dir_DTA = False
+Ark2Dir_Inflate = False
 
 Dir2Ark_InFolder = ""
 Dir2Ark_OutFolder = ""
 Dir2Ark_Name = ""
 Dir2Ark_Version = ""
-Dir2Ark_Encrypt = ""
+Dir2Ark_Encrypt = False
 
 Patchcreator_ArkFiles_Path = ""
 Patchcreator_outputPath = ""
@@ -29,11 +29,19 @@ Patchcreator_arkpath = ""
 Patchcreator_exepath = ""
 
 Dir2Milo_Version = ""
-Dir2Milo_Endian = ""
+Dir2Milo_Endian = False
 Dir2Milo_Platform = ""
 Dir2Milo_Preset = ""
 Dir2Milo_Dir = ""
 Dir2Milo_Milo = ""
+
+Milo2Dir_Convert = ""
+Milo2Dir_UseVersion = False
+Milo2Dir_Version = ""
+Milo2Dir_Endian = False
+Milo2Dir_Preset = "gh2_x360"
+Milo2Dir_Milo = ""
+Milo2Dir_Dir = ""
 
 
 #####################
@@ -140,7 +148,7 @@ def PatchcreatorCallback(): # launches arkhelper with Patchcreator + specified a
     proc = sp.run([arkhelper, "patchcreator", Patchcreator_arkpath, arkhelper] + OptionalArgs, capture_output=True, text=True)
     PrintfToConsole(str(proc.stdout))    
 
-def Dir2MiloCallback(): # launches arkhelper with Ark2Dir + specified args
+def Dir2MiloCallback(): # launches arkhelper with dir2milo + specified args
     if DebugMode == True:
         print(f"[DEBUG] Dir2Milo_Preset: {Dir2Milo_Preset}")
         print(f"[DEBUG] Dir2Milo_Dir: {Dir2Milo_Dir}")
@@ -155,24 +163,55 @@ def Dir2MiloCallback(): # launches arkhelper with Ark2Dir + specified args
     proc = sp.run([superfreq, "dir2milo", Dir2Milo_Dir, Dir2Milo_Milo, "-r", Dir2Milo_Preset] + OptionalArgs, capture_output=True, text=True)
     PrintfToConsole(str(proc.stdout))
 
+def Milo2DirCallback(): # launches arkhelper with milo2dir + specified args
+    if DebugMode == True:
+        print(f"[DEBUG] Milo2Dir_Convert: {Milo2Dir_Convert}")
+        print(f"[DEBUG] Milo2Dir_Version: {Milo2Dir_Version}")
+        print(f"[DEBUG] Milo2Dir_Endian: {Milo2Dir_Endian}")
+        print(f"[DEBUG] Milo2Dir_Preset: {Milo2Dir_Preset}")
+        print(f"[DEBUG] Milo2Dir_Milo: {Milo2Dir_Milo}")
+        print(f"[DEBUG] Milo2Dir_Dir: {Milo2Dir_Dir}")
+        print(f"[DEBUG] Milo2Dir_UseVersion: {Milo2Dir_UseVersion}")
+
+    OptionalArgs = []
+
+    if Dir2Milo_Endian == True:
+        OptionalArgs.append("-b")
+
+    if Milo2Dir_Convert == True:
+        OptionalArgs.append("-t")
+
+    if not Milo2Dir_Preset == "None":
+        OptionalArgs.append("-r")
+        OptionalArgs.append(Milo2Dir_Preset)
+    
+    if Milo2Dir_UseVersion == True and Milo2Dir_Preset == "None":
+        OptionalArgs.append("-m")
+        OptionalArgs.append(Milo2Dir_Version)        
+
+    print(OptionalArgs)
+
+    proc = sp.run([superfreq, "milo2dir", Milo2Dir_Milo, Milo2Dir_Dir] + OptionalArgs, capture_output=True, text=True)
+    PrintfToConsole(str(proc.stdout))
+
 ####################
 # System Window Init
 ####################
 dpg.create_context()
-dpg.create_viewport(title='Mackiloha-GUI - v1.0p', width=1280, height=720)
+dpg.create_viewport(title='Mackiloha-GUI - v1.0p', width=800, height=720)
 
 
 #####################################################
 # Output Window, merge with main window in the future
 #####################################################
-with dpg.window(label="Output",  width=800, height=310, pos=[10,310], no_close=True):
+with dpg.window(label="Output",  width=800, height=310, pos=[0,310], no_close=True):
     with dpg.child_window(horizontal_scrollbar=True, width=790, height=275, tag="console_window"):  
         pass
 
 #################
 # Main GUI Window
 #################
-with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[10,10], no_close=True):
+with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_close=True):
     
     ## Debug header section
     if DebugMode == True:
@@ -253,6 +292,29 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[10,10], no_cl
 
                     dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Dir2Milo_Endian")
                     dpg.add_button(label="Run Superfreq", callback=Dir2MiloCallback)
+
+                with dpg.tab(label="Milo2Dir"):
+                    dpg.add_text("Options for Milo2Dir:")   
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_input_text(label="Input File", hint="Enter Input Milo Here (*)", callback=UpdateVarCallback, user_data="Milo2Dir_Milo")
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_input_text(label="Folder Path", hint="Enter Folder Path Here (*)", callback=UpdateVarCallback, user_data="Milo2Dir_Dir")
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_combo(("gh1", "gh2", "gh80s", "gh2_x360"), default_value="gh2_x360",label="Preset", callback=UpdateVarCallback, user_data="Milo2Dir_Preset")
+
+                    #with dpg.group(horizontal=True): 
+                    #   dpg.add_checkbox(callback=UpdateVarCallback, user_data="Milo2Dir_UseVersion")
+                    #    dpg.add_input_int(label="Milo Version", default_value=24, callback=UpdateVarCallback, user_data="Dir2Milo_Version")
+
+                    dpg.add_checkbox(label="Convert Textures?", callback=UpdateVarCallback, user_data="Milo2Dir_Convert")
+                    #dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Milo2Dir_Endian")
+                    dpg.add_button(label="Run Superfreq", callback=Milo2DirCallback)
 
             
 
