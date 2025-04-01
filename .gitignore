@@ -31,9 +31,15 @@
 *.out
 *.app
 
-src/Mackiloha-GUI
-src/buildnrun.sh
-src/arkhelper
-src/dtab
-src/superfreq
-src/p9songtool
+
+C++Ver/src/Mackiloha-GUI
+C++Ver/src/buildnrun.sh
+C++Ver/src/arkhelper
+C++Ver/src/dtab
+C++Ver/src/superfreq
+C++Ver/src/p9songtool
+
+Python Rewrite/arkhelper
+Python Rewrite/dtab
+Python Rewrite/superfreq
+Python Rewrite/p9songtool
