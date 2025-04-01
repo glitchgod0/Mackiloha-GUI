@@ -3,6 +3,11 @@ import dearpygui.demo as demo
 import subprocess as sp
 import sys
 
+DebugMode = False
+
+# Check if debug mode is enabled
+if len(sys.argv) > 1:
+    DebugMode = True
 
 #############################################
 # Initallize all of the options for the tools
@@ -75,10 +80,11 @@ def UpdateVarCallback(sender, app_data, user_data):  # Used to update tool argum
 # Tool Callback Functions, launches the tool with the args specified
 ####################################################################
 def Ark2DirCallback(): # launches arkhelper with Ark2Dir + specified args
-    print(f"[DEBUG] Ark2Dir_InFile: {Ark2Dir_InFile}")
-    print(f"[DEBUG] Ark2Dir_InFile: {Ark2Dir_OutFolder}")
-    print(f"[DEBUG] Ark2Dir_DTA: {Ark2Dir_DTA}")
-    print(f"[DEBUG] Ark2Dir_Inflate: {Ark2Dir_Inflate}")
+    if DebugMode == True:
+        print(f"[DEBUG] Ark2Dir_InFile: {Ark2Dir_InFile}")
+        print(f"[DEBUG] Ark2Dir_InFile: {Ark2Dir_OutFolder}")
+        print(f"[DEBUG] Ark2Dir_DTA: {Ark2Dir_DTA}")
+        print(f"[DEBUG] Ark2Dir_Inflate: {Ark2Dir_Inflate}")
 
     OptionalArgs = []
 
@@ -92,14 +98,14 @@ def Ark2DirCallback(): # launches arkhelper with Ark2Dir + specified args
     PrintfToConsole(str(proc.stdout))
 
 def Dir2ArkCallback(): # launches arkhelper with Dir2Ark + specified args
-    print(f"[DEBUG] Dir2Ark_InFolder: {Dir2Ark_InFolder}")
-    print(f"[DEBUG] Dir2Ark_OutFolder: {Dir2Ark_OutFolder}")
-    print(f"[DEBUG] Dir2Ark_Name: {Dir2Ark_Name}")
-    print(f"[DEBUG] Dir2Ark_Version: {Dir2Ark_Version}")
-    print(f"[DEBUG] Dir2Ark_Encrypt: {Dir2Ark_Encrypt}")
+    if DebugMode == True:
+        print(f"[DEBUG] Dir2Ark_InFolder: {Dir2Ark_InFolder}")
+        print(f"[DEBUG] Dir2Ark_OutFolder: {Dir2Ark_OutFolder}")
+        print(f"[DEBUG] Dir2Ark_Name: {Dir2Ark_Name}")
+        print(f"[DEBUG] Dir2Ark_Version: {Dir2Ark_Version}")
+        print(f"[DEBUG] Dir2Ark_Encrypt: {Dir2Ark_Encrypt}")
 
     OptionalArgs = []
-
 
     if Dir2Ark_Name != "":
         OptionalArgs.append(f"-n {Dir2Ark_Name}")
@@ -112,10 +118,11 @@ def Dir2ArkCallback(): # launches arkhelper with Dir2Ark + specified args
     PrintfToConsole(str(proc.stdout)) 
 
 def PatchcreatorCallback(): # launches arkhelper with Patchcreator + specified args
-    print(f"[DEBUG] Patchcreator_ArkFiles_Path: {Patchcreator_ArkFiles_Path}")
-    print(f"[DEBUG] Patchcreator_outputPath: {Patchcreator_outputPath}")
-    print(f"[DEBUG] Patchcreator_arkpath: {Patchcreator_arkpath}")
-    print(f"[DEBUG] Patchcreator_exepath: {Patchcreator_exepath}")
+    if DebugMode == True:
+        print(f"[DEBUG] Patchcreator_ArkFiles_Path: {Patchcreator_ArkFiles_Path}")
+        print(f"[DEBUG] Patchcreator_outputPath: {Patchcreator_outputPath}")
+        print(f"[DEBUG] Patchcreator_arkpath: {Patchcreator_arkpath}")
+        print(f"[DEBUG] Patchcreator_exepath: {Patchcreator_exepath}")
 
     OptionalArgs = []
     OptionalArgs.append(f"-a {Patchcreator_ArkFiles_Path}")
@@ -145,10 +152,10 @@ with dpg.window(label="Output",  width=800, height=310, pos=[10,310], no_close=T
 #################
 with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[10,10], no_close=True):
     
-
     ## Debug header section
-    with dpg.collapsing_header(label="--DEBUG--"):
-        dpg.add_button(label="Open Demo Window", callback=DemoWindowCallback)
+    if DebugMode == True:
+        with dpg.collapsing_header(label="--DEBUG--"):
+            dpg.add_button(label="Open Demo Window", callback=DemoWindowCallback)
 
     # this bit is a bit messy, tabs within tabs is ass.
     with dpg.tab_bar(): # Main tab bar, this specifies the tool to use, arkhelper, superfreq, etc
