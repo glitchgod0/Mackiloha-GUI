@@ -252,6 +252,7 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
     if DebugMode == True:
         with dpg.collapsing_header(label="--DEBUG--"):
             dpg.add_button(label="Open Demo Window", callback=DemoWindowCallback)
+            dpg.add_button(label="Run Superfreq", callback=Tex2PngCallback)
 
     # this bit is a bit messy, tabs within tabs is ass.
     with dpg.tab_bar(): # Main tab bar, this specifies the tool to use, arkhelper, superfreq, etc
@@ -372,6 +373,10 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[0,0], no_clos
 
                     #dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Tex2Png_Endian")
                     dpg.add_button(label="Run Superfreq", callback=Tex2PngCallback)
+
+        with dpg.tab(label="Credits"):
+            dpg.add_text("Mackiloha-GUI")
+                
 
             
 
