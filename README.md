@@ -1,6 +1,8 @@
 # MackilohaGUI
 Very basic ImGUI app for working with Mackiloha and maybe other things in the future.
 
+# Usage
+Put the Mackiloha apps + dtab in the Apps/Platform folder
 
  # Goals
 * Arkhelper - 3/3 functions done
