@@ -28,6 +28,13 @@ Patchcreator_outputPath = ""
 Patchcreator_arkpath = ""
 Patchcreator_exepath = ""
 
+Dir2Milo_Version = ""
+Dir2Milo_Endian = ""
+Dir2Milo_Platform = ""
+Dir2Milo_Preset = ""
+Dir2Milo_Dir = ""
+Dir2Milo_Milo = ""
+
 
 #####################
 # Specify tool folder
@@ -133,6 +140,21 @@ def PatchcreatorCallback(): # launches arkhelper with Patchcreator + specified a
     proc = sp.run([arkhelper, "patchcreator", Patchcreator_arkpath, arkhelper] + OptionalArgs, capture_output=True, text=True)
     PrintfToConsole(str(proc.stdout))    
 
+def Dir2MiloCallback(): # launches arkhelper with Ark2Dir + specified args
+    if DebugMode == True:
+        print(f"[DEBUG] Dir2Milo_Preset: {Dir2Milo_Preset}")
+        print(f"[DEBUG] Dir2Milo_Dir: {Dir2Milo_Dir}")
+        print(f"[DEBUG] Dir2Milo_Milo: {Dir2Milo_Milo}")
+        print(f"[DEBUG] Dir2Milo_Endian: {Dir2Milo_Endian}")
+
+    OptionalArgs = []
+
+    if Dir2Milo_Endian == True:
+        OptionalArgs.append("-b")
+
+    proc = sp.run([superfreq, "dir2milo", Dir2Milo_Dir, Dir2Milo_Milo, "-r", Dir2Milo_Preset] + OptionalArgs, capture_output=True, text=True)
+    PrintfToConsole(str(proc.stdout))
+
 ####################
 # System Window Init
 ####################
@@ -206,11 +228,31 @@ with dpg.window(label="Mackiloha-GUI", width=800, height=300, pos=[10,10], no_cl
                     dpg.add_button(label="Run Arkhelper", callback=PatchcreatorCallback)   
 
 
-
-                     
-
         with dpg.tab(label="Superfreq"):
-            dpg.add_text("This is the broccoli tab!")
+            with dpg.tab_bar():
+
+                with dpg.tab(label="Dir2Milo"):
+                    dpg.add_text("Options for Dir2Milo:")   
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_input_text(label="Folder Path", hint="Enter Folder Path Here (*)", callback=UpdateVarCallback, user_data="Dir2Milo_Dir")
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_input_text(label="Output File", hint="Enter Output Milo Here (*)", callback=UpdateVarCallback, user_data="Dir2Milo_Milo")
+
+                    with dpg.group(horizontal=True):
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        dpg.add_combo(("gh1", "gh2", "gh80s", "gh2_x360"), default_value="gh2",label="Preset", callback=UpdateVarCallback, user_data="Dir2Milo_Preset")
+
+                    # commented out because i dont think it gets enough use but im not 100% sure
+                    #with dpg.group(horizontal=True): 
+                        #dpg.add_button(label="Open") # Eventually make a file dialog here.
+                        #dpg.add_input_int(label="Milo Version", default_value=24, callback=UpdateVarCallback, user_data="Dir2Milo_Version")
+
+                    dpg.add_checkbox(label="Use Big Endian?", callback=UpdateVarCallback, user_data="Dir2Milo_Endian")
+                    dpg.add_button(label="Run Superfreq", callback=Dir2MiloCallback)
 
             
 
